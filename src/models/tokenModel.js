@@ -1,16 +1,22 @@
 import mongoose from "mongoose";
 
-const tokenSchema = new mongoose.Schema({
-  token: {
-    type: String,
-    required: true,
-    unique: true,
+const tokenSchema = new mongoose.Schema(
+  {
+    token: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    userId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
   },
-  userId: {
-    type: String,
-  
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const Token = mongoose.model("Token", tokenSchema);
 
