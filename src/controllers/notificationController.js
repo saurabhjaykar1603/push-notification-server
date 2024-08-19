@@ -1,17 +1,18 @@
 import Token from "../models/tokenModel.js";
 import sendNotification from "../utils/sendNotification.js";
 
+
 export const registerToken = async (req, res) => {
-  const { token } = req.body;
+  const { token, userId } = req.body;
+  
   if (!token) {
     return res.status(400).send("Token is required");
   }
-  console.log(token);
 
   try {
     const existingToken = await Token.findOne({ token });
     if (!existingToken) {
-      const newToken = new Token({ token });
+      const newToken = new Token({ token, userId });
       await newToken.save();
       return res.status(200).json({ message: "Token saved successfully" });
     }
@@ -22,13 +23,17 @@ export const registerToken = async (req, res) => {
 };
 
 export const sendNotificationToAll = async (req, res) => {
-  const { title, body } = req.body;
+  const { title, body, image, url } = req.body;
+  console.log(req.body);
 
   try {
     const tokens = await Token.find();
-    await sendNotification(tokens, title, body);
+    // console.log(tokens);
+
+    await sendNotification(tokens, title, body, url, image);
     res.status(200).send("Notifications sent successfully");
   } catch (error) {
     res.status(500).send("Error sending notifications");
+    console.log(error.message);
   }
 };
